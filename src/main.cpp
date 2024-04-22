@@ -7,8 +7,7 @@
 #include <M5Unified.h>
 #include "UNIT_EXT_ENCODER.h"
 
-M5GFX display;
-M5Canvas canvas(&display);
+M5Canvas canvas(&M5.Display);
 UNIT_EXT_ENCODER encoder;
 
 char buffer[20];
@@ -19,19 +18,24 @@ const uint8_t PULSE_PER_TURN = 200;
 
 void setup() {
     M5.begin();
-    // M5.begin(true, false, true);
-    // M5.Power.begin();
-    display.begin();
+    
+    M5.Display.begin();
 
     canvas.setColorDepth(8);  // mono color
     canvas.setFont(&fonts::efontCN_12);
-    canvas.createSprite(display.width(), display.height());
+    canvas.createSprite(M5.Display.width(), M5.Display.height());
     canvas.clear(WHITE);
     canvas.setTextSize(2);
     canvas.setTextColor(BLACK);
     canvas.setCursor(0, 80);
-    // while (!(encoder.begin(&Wire, UNIT_EXT_ENCODER_ADDR, 21, 22, 100000UL))) {
-    while (!(encoder.begin(&Wire, UNIT_EXT_ENCODER_ADDR, 32, 33, 100000UL))) {
+    
+    uint8_t sda = 21;
+    uint8_t scl = 22;
+    if (M5.getBoard() == m5::board_t::board_M5StackCore2) {
+        sda = 32;
+        scl = 33;
+    }
+    while (!(encoder.begin(&Wire, UNIT_EXT_ENCODER_ADDR, sda, scl, 100000UL))) {
         canvas.clear(BLACK);
         canvas.setTextColor(WHITE);
         canvas.setCursor(10, 0);
