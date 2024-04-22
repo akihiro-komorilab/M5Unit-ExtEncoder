@@ -4,8 +4,7 @@
 //
 // Modified by Akihiro Komori on 3/5/2024
 
-#include <M5Stack.h>
-#include <M5GFX.h>
+#include <M5Unified.h>
 #include "UNIT_EXT_ENCODER.h"
 
 M5GFX display;
@@ -19,8 +18,9 @@ uint8_t zero_mode = 0;
 const uint8_t PULSE_PER_TURN = 200;
 
 void setup() {
-    M5.begin(true, false, true);
-    M5.Power.begin();
+    M5.begin();
+    // M5.begin(true, false, true);
+    // M5.Power.begin();
     display.begin();
 
     canvas.setColorDepth(8);  // mono color
@@ -30,7 +30,8 @@ void setup() {
     canvas.setTextSize(2);
     canvas.setTextColor(BLACK);
     canvas.setCursor(0, 80);
-    while (!(encoder.begin(&Wire, UNIT_EXT_ENCODER_ADDR, 21, 22, 100000UL))) {
+    // while (!(encoder.begin(&Wire, UNIT_EXT_ENCODER_ADDR, 21, 22, 100000UL))) {
+    while (!(encoder.begin(&Wire, UNIT_EXT_ENCODER_ADDR, 32, 33, 100000UL))) {
         canvas.clear(BLACK);
         canvas.setTextColor(WHITE);
         canvas.setCursor(10, 0);
